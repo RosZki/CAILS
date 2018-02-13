@@ -1,0 +1,24 @@
+- name: Pooh
+  type: bear
+  age: N/A
+  personality:
+      extraversion: 0.5
+      neuroticism: -1
+      openness: 1
+      conscientiousness: 0
+      agreeableness: 1
+  knowledge:
+    Piglet:
+        IsA:
+          - friend
+          - ally
+
+- name: Piglet
+  type: piglet
+  age: N/A
+  personality:
+      extraversion: -0.5
+      neuroticism: 0.75
+      openness: 0
+      conscientiousness: 0
+      agreeableness: 1

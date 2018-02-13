@@ -1,0 +1,197 @@
+<html>
+	<head>
+        {% load static %}
+        <link rel = 'stylesheet' type = 'text/css' href = '{% static 'css/components.css' %}'>
+	    <title>CAILS Messenger</title>
+    </head>
+
+	<script src='{% static 'js/jquery-3.2.1.min.js' %}'></script>
+    <script src='{% static "js/js.cookie.js" %}'></script>
+	<script>
+		$(document).ready(function () {
+			var observe;
+			if (window.attachEvent) {
+				observe = function (element, event, handler) {
+					element.attachEvent('on'+event, handler);
+				};
+			}
+			else {
+				observe = function (element, event, handler) {
+					element.addEventListener(event, handler, false);
+				};
+			}
+			function init() {
+				var text = document.getElementById('message');
+				function resize () {
+					text.style.height = 'auto';
+					text.style.height = -15 + text.scrollHeight+'px';
+				}
+				/* 0-timeout to get the already changed text */
+				function delayedResize () {
+					window.setTimeout(resize, 0);
+				}
+				observe(text, 'change',  resize);
+				observe(text, 'cut',     delayedResize);
+				observe(text, 'paste',   delayedResize);
+				observe(text, 'drop',    delayedResize);
+				observe(text, 'keydown', delayedResize);
+
+				text.focus();
+				text.select();
+				resize();
+			}
+
+			var csrftoken = Cookies.get('csrftoken');
+
+			function csrfSafeMethod(method){
+			    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings){
+                    if(!csrfSafeMethod(settings.type) && !this.crossDomain){
+                        xhr.setRequestHeader('X-CSRFToken', csrftoken);
+                    }
+                }
+            });
+
+			function sendMessage(){
+			    var message = $('#message').val();
+                $('#chat-area').append("<div class = 'chat-bubble-container'>\n" +
+                    "\t\t\t\t\t\t" + "<div class = 'chat-bubble user'>\n" +
+                    "\t\t\t\t\t\t\t" + message + "\n" +
+                    "\t\t\t\t\t\t" + "</div>\n" +
+                    "\t\t\t\t\t" + "</div>");
+
+			    var $submit = $.ajax({
+                    type: 'POST',
+                    url: '/messenger/ajax/process_message/',
+                    data: JSON.stringify({'message': message}),
+                    contentType: 'application/json'
+                });
+
+                $submit.done(function(statement){
+                    $('#chat-area').append("<div class = 'chat-bubble-container'>\n" +
+                        "\t\t\t\t\t\t" + "<div class = 'agent-icon'></div>\n" +
+                        "\t\t\t\t\t\t" + "<div class = 'chat-bubble agent'>\n" +
+                        "\t\t\t\t\t\t\t" + statement.response + "\n" +
+                        "\t\t\t\t\t\t" + "</div>\n" +
+                        "\t\t\t\t\t" + "</div>");
+                    $('#chat-area')[0].scrollTop = $('#chat-area')[0].scrollHeight;
+                });
+
+			    $submit.fail(function(){
+
+                });
+
+
+			    $('#message').val('');
+            }
+
+            $('#message').keydown(function(event){
+                if(event.keyCode == 13){
+                    event.preventDefault();
+                    sendMessage();
+                }
+            });
+
+			$('#send-message').click(function(event){
+			    sendMessage();
+            });
+
+			window.onload = function () {init();}
+		});
+	</script>
+
+	<body>
+		<div class = 'chat-container'>
+			<div class = 'chat-header'>
+				<div class = 'agent-name'>CAILS</div>
+			</div>
+
+			<div class = 'chat-box'>
+				<div class = 'chat-area' id='chat-area'></div>
+
+			</div>
+
+			<div class = 'chat-footer'>
+				<textarea class = 'message-container' id = 'message' placeholder='Type a message ...'></textarea>
+				<label class = 'send-message' id='send-message'></label>
+			</div>
+		</div>
+
+		<div class = 'control-container'>
+			<div class = 'control-items'>
+				<label class = 'control-label'>Extraversion</label>
+				<div class = 'slider-container'>
+					<input type="range" min="1" max="5" value="3" class="slider" id="myRange">
+				</div>
+				<div class = 'slider-label-container'>
+					<div class = 'slider-labels'>-1</div>
+					<div class = 'slider-labels'>-0.5</div>
+					<div class = 'slider-labels'>0</div>
+					<div class = 'slider-labels'>0.5</div>
+					<div class = 'slider-labels'>1</div>
+				</div>
+			</div>
+
+			<div class = 'control-items'>
+				<label class = 'control-label'>Neuroticism</label>
+				<div class = 'slider-container'>
+					<input type="range" min="1" max="5" value="3" class="slider" id="myRange">
+				</div>
+				<div class = 'slider-label-container'>
+					<div class = 'slider-labels'>-1</div>
+					<div class = 'slider-labels'>-0.5</div>
+					<div class = 'slider-labels'>0</div>
+					<div class = 'slider-labels'>0.5</div>
+					<div class = 'slider-labels'>1</div>
+				</div>
+			</div>
+
+			<div class = 'control-items'>
+				<label class = 'control-label'>Openness</label>
+				<div class = 'slider-container'>
+					<input type="range" min="1" max="5" value="3" class="slider" id="myRange">
+				</div>
+				<div class = 'slider-label-container'>
+					<div class = 'slider-labels'>-1</div>
+					<div class = 'slider-labels'>-0.5</div>
+					<div class = 'slider-labels'>0</div>
+					<div class = 'slider-labels'>0.5</div>
+					<div class = 'slider-labels'>1</div>
+				</div>
+			</div>
+
+			<div class = 'control-items'>
+				<label class = 'control-label'>Agreeableness</label>
+				<div class = 'slider-container'>
+					<input type="range" min="1" max="5" value="3" class="slider" id="myRange">
+				</div>
+				<div class = 'slider-label-container'>
+					<div class = 'slider-labels'>-1</div>
+					<div class = 'slider-labels'>-0.5</div>
+					<div class = 'slider-labels'>0</div>
+					<div class = 'slider-labels'>0.5</div>
+					<div class = 'slider-labels'>1</div>
+				</div>
+			</div>
+
+			<div class = 'control-items'>
+				<label class = 'control-label'>Conscientiousness</label>
+				<div class = 'slider-container'>
+					<input type="range" min="1" max="5" value="3" class="slider" id="myRange">
+				</div>
+				<div class = 'slider-label-container'>
+					<div class = 'slider-labels'>-1</div>
+					<div class = 'slider-labels'>-0.5</div>
+					<div class = 'slider-labels'>0</div>
+					<div class = 'slider-labels'>0.5</div>
+					<div class = 'slider-labels'>1</div>
+				</div>
+			</div>
+
+			<button class = 'set-btn'>Set Personality</button>
+		</div>
+	</body>
+</html>
