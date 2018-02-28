@@ -33,8 +33,10 @@ def collate(plans):
     print(collated_plans)
     return collated_plans
 
-def compound(collated_plans):
+
+def compound(collated_plans, dict_conj):
     a = 1
+
 
 def stutter(output, percentage):
     words = output.split()
@@ -50,6 +52,7 @@ def stutter(output, percentage):
 def add_hedgers(sentences, dict_hedgers):
     a = 1
 
+
 def plan_response(message, params):
     final_message = []
     tagged = interpreter.stanford_pos(message)
@@ -58,6 +61,9 @@ def plan_response(message, params):
     topic = random.choice(keywords)
 
     plans = sentence_planner.describe_subject(topic, params['num_sentences'])
+    # print(plans)
+    if len(plans) > 1:
+        plans[:] = [x for x in plans if x != {'params': {}, 'modifiers': {}}]
     for x in plans:
         final_message.append(generator.generate_simple_sentence(x['params'], x['modifiers']))
 

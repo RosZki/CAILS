@@ -20,7 +20,8 @@ def index(request):
     #print(conjugator.conjugate("jump over", number=conjugator.PLURAL, person=conjugator.THIRD_PERSON, tense=conjugator.PRESENT_TENSE))
     #print(interpreter.stanford_pos("King of Germans"))
     #print("final: ", sentence_planner.traverse_and_check("university", memory.CURRENT_CONTEXT, [],[]))
-    #print(sentence_planner.plan_randomly_from_memory("Ateneo De Manila University", 2))
+    #print(sentence_planner.plan_randomly_from_memory("", 2))
+    #memory.save_memory("memory1.yml")
     return render(request, 'messenger/index.html', context)
 
 def process_message(request):
@@ -46,6 +47,6 @@ def process_message(request):
     #    plan = sentence_planner.describe_subject(choice)
     #output_message = generate_trial.generate_simple_sentence(plan['params'], plan['modifiers'])
     #output_message = generate_trial.generate_simple_question(message, "What")
-    output_message = response_planner.plan_response(message, {'num_sentences': 10, 'stutter':0.25})
+    output_message = response_planner.plan_response(message, {'num_sentences': 10, 'stutter':0})
     data = {'response': output_message}
     return JsonResponse(data)

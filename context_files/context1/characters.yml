@@ -1,6 +1,5 @@
 - name: Pooh
   type: bear
-  age: N/A
   personality:
       extraversion: 0.5
       neuroticism: -1
@@ -9,16 +8,26 @@
       agreeableness: 1
   knowledge:
     Piglet:
-        IsA:
-          - friend
-          - ally
+        IsA: [friend, ally]
+  params:
+    speech:
+        stutter: 0
+        verbosity: 3
+        however: 0.33
+        period: 0.33
+        and: 0.33
+    behavior:
+        ignore: 0
 
 - name: Piglet
   type: piglet
-  age: N/A
   personality:
       extraversion: -0.5
       neuroticism: 0.75
       openness: 0
       conscientiousness: 0
       agreeableness: 1
+  params:
+    speech:
+        stutter: 0.25
+        verbosity: 4

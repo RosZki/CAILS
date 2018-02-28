@@ -15,6 +15,7 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONTEXT_DIR = os.path.join(BASE_DIR, 'context_files\\')
+MEMORY_DIR = os.path.join(BASE_DIR, 'memory_files\\')
 CFG_DIR = os.path.join(BASE_DIR, 'cfg_files\\')
 #MEMORY_DIR = os.path.join(BASE_DIR, 'memory_files\\memory\\')
 

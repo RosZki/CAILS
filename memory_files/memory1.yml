@@ -1,0 +1,5 @@
+characters:
+- knowledge:
+    Piglet:
+      IsA: [friend, ally]
+  name: Pooh

@@ -10,6 +10,4 @@ urlpatterns = [
 ]
 
 memory.read_context('context1')
-print(memory.CURRENT_CONTEXT)
-print(memory.CURRENT_MEMORY)
 core_nlp_server.run_server()

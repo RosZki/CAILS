@@ -35,11 +35,19 @@ def get_valid_patterns(keys):
             set([y for y in x.split() if not (y.startswith('[') and y.endswith(']'))]).issubset(keys)]
 
 
-def generate_list_of_modifiers(list):
-    return ", ".join(list[:-1]) + ", and " + list[len(list) - 1]
+def generate_string_from_list(list):
+    if len(list) > 2:
+        return ", ".join(list[:-1]) + ", and " + list[len(list) - 1]
+    elif len(list) == 2:
+        return list[0] + " and " + list[1]
+    elif len(list) == 1:
+        return list[0]
+    else:
+        return ""
 
 
 def apply_pattern(pattern, params, modifiers):
+    #print('In apply_pattern, params:', params)
     split_pattern = pattern.split()
     prev_status = False
     curr_sentence = ""
@@ -59,7 +67,7 @@ def apply_pattern(pattern, params, modifiers):
                                                                                person=modifiers.get('voice'),
                                                                                tense=modifiers.get('vp_tense'))
                 elif x.startswith("adj") or x.startswith("adv"):
-                    curr_sentence = curr_sentence + " " + generate_list_of_modifiers(params[x])
+                    curr_sentence = curr_sentence + " " + generate_string_from_list(params[x])
                 else:
                     curr_sentence = curr_sentence + " " + params[x]
             prev_status = True
@@ -81,6 +89,8 @@ def get_point_of_view(noun):
 
 
 def generate_simple_sentence(params={}, modifiers={}, default_sentence="I have no idea."):
+    #print("params:", params)
+    #print("modifiers: ", modifiers)
     if params == {} or modifiers == {}:
         return default_sentence
     return apply_pattern(random.choice(get_valid_patterns(params.keys())), params, modifiers)
