@@ -60,7 +60,7 @@ def plan_response(message, params):
 
     topic = random.choice(keywords)
 
-    plans = sentence_planner.describe_subject(topic, params['num_sentences'])
+    plans = sentence_planner.describe_subject(topic, params['speech']['verbosity'])
     # print(plans)
     if len(plans) > 1:
         plans[:] = [x for x in plans if x != {'params': {}, 'modifiers': {}}]
@@ -68,5 +68,5 @@ def plan_response(message, params):
         final_message.append(generator.generate_simple_sentence(x['params'], x['modifiers']))
 
     output = " ".join(final_message)
-    output = stutter(output, params['stutter'])
+    output = stutter(output, params['speech']['stutter'])
     return output

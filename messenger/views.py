@@ -4,11 +4,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import ensure_csrf_cookie
 
-from brain.planner import response_planner
-from brain.planner import sentence_planner
-from brain.conjugator import conjugator
-from brain import generator
-from brain import memory
+from brain import dialogue_manager
 
 # Create your views here.
 @ensure_csrf_cookie
@@ -47,6 +43,7 @@ def process_message(request):
     #    plan = sentence_planner.describe_subject(choice)
     #output_message = generate_trial.generate_simple_sentence(plan['params'], plan['modifiers'])
     #output_message = generate_trial.generate_simple_question(message, "What")
-    output_message = response_planner.plan_response(message, {'num_sentences': 10, 'stutter':0})
+    #output_message = response_planner.plan_response(message, {'num_sentences': 10, 'stutter':0})
+    output_message = dialogue_manager.talk(message)
     data = {'response': output_message}
     return JsonResponse(data)

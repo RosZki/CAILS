@@ -867,7 +867,7 @@ def conjugate(verb, number=None, person=None, tense=None, modal=None,
 
     return " ".join(conjugate_stack).strip()
 
-def is_plural(word):
+def plural(word):
     split = word.split()
     if len(split) > 1:
         word = split[len(split)-1]
@@ -875,4 +875,13 @@ def is_plural(word):
     wnl = WordNetLemmatizer()
     lemma = wnl.lemmatize(word, 'n')
     plural = True if word is not lemma else False
-    return plural
+    return plural, lemma
+
+def base_form(word):
+    split = word.split()
+    if len(split) > 1:
+        word = split[len(split) - 1]
+    word = word.lower()
+    wnl = WordNetLemmatizer()
+    lemma = wnl.lemmatize(word, 'v')
+    return lemma

@@ -73,7 +73,7 @@ def plan_from_conceptnet(subject, num_sentences):
         for x in selection:
             text = random.choice(RELS_GEN[random_rel])
             if text == 'a ':
-                if conjugator.is_plural(x[1]):
+                if conjugator.plural(x[1]):
                     text == ""
             plans.append(generate_sentence_plan(x, text, vp))
     return plans
@@ -118,15 +118,17 @@ def plan_from_event(key, event_info, subject=""):
 def plan_from_memory(info, name, key="knowledge", subject=""):
     print(info, name, key, subject)
     if info == "events":
-        return plan_from_event(key, chain_access(
-            [x for x in chain_access(memory.CURRENT_CONTEXT, [info]) if x['name'] == name], [0]), subject=subject)
+        context_info = chain_access([x for x in chain_access(memory.CURRENT_CONTEXT, [info]) if x['name'] == name], [0])
+        memory_info = chain_access([x for x in chain_access(memory.CURRENT_MEMORY, [info]) if x['name'] == name], [0])
+        if context_info == {}:
+            return plan_from_event(key, memory_info, subject=subject)
+        else:
+            return plan_from_event(key, context_info, subject=subject)
     elif key == "knowledge":
         context_info = chain_access([x for x in chain_access(memory.CURRENT_CONTEXT, [info]) if x['name'] == name],
                                     [0, key, subject])
-        print("subjasd:", [x for x in chain_access(memory.CURRENT_CONTEXT, [info]) if x['name'] == name])
         memory_info = chain_access([x for x in chain_access(memory.CURRENT_MEMORY, [info]) if x['name'] == name],
                                    [0, key, subject])
-        print("memory_info:", memory_info)
         total_info = list(set(context_info.keys()).union(memory_info.keys()))
         if total_info == [] or total_info == {}:
             return {'params': {}, 'modifiers': {}}
@@ -188,10 +190,14 @@ def plan_randomly_from_memory(subject, num_sentences):
     # print("rand_plan_op_cont: ", chain_access(memory.CURRENT_CONTEXT, rand2))
     memory_dir, opinion_dir_mem = traverse_and_check(subject, memory.CURRENT_MEMORY, [], [], [])
     # print("mem: ", memory_dir)
+    print(memory_dir)
     for x in memory_dir:
         y = [z for z in list(memory.CURRENT_MEMORY[x[0]][x[1]].keys()) if z not in KEYS_TO_REMOVE]
         if len(y) < 1:
             break
+        print(x)
+        print(y)
+        print(memory.CURRENT_MEMORY)
         pl = plan_from_memory(x[0], memory.CURRENT_MEMORY[x[0]][x[1]]['name'], random.choice(y))
         if not check_if_duplicate(pl, rand_plans):
             rand_plans.append(pl)
@@ -216,14 +222,18 @@ def plan_randomly_from_memory(subject, num_sentences):
         # print("op_mem: ", opinion_dir_mem)
 
 
-def traverse_and_check(subject, tree, curr_dir, list_dir, opinion_dir):
+def traverse_and_check(subject, tree, curr_dir, list_dir, opinion_dir, equal=True, arr=None):
     # print("curr_dir: ",curr_dir)
     # print("list_dir: ", list_dir)
     if type(tree) is dict:
         for key in list(tree.keys()):
             curr_dir.append(key)
-            if type(key) == str and key.lower() == subject.lower():
-                opinion_dir.append(curr_dir[:])
+            if equal:
+                if type(key) == str and key.lower() == subject.lower():
+                    opinion_dir.append(curr_dir[:])
+            else:
+                if type(key) == str and subject.lower() in key.lower():
+                    opinion_dir.append(curr_dir[:])
             traverse_and_check(subject, tree[key], curr_dir, list_dir, opinion_dir)
             curr_dir.pop()
     elif type(tree) is list:
@@ -233,19 +243,28 @@ def traverse_and_check(subject, tree, curr_dir, list_dir, opinion_dir):
             curr_dir.pop()
     else:
         # print(tree, "vs.", subject)
-        if type(tree) == str and subject.lower() == tree.lower():
-            # print("Match!")
-            # print("list_dir [before]:", list_dir)
-            # print("curr_dir:", curr_dir)
-            list_dir.append(curr_dir[:])
-            # print("list_dir [after]:", list_dir)
-            return list_dir, opinion_dir
+        if equal:
+            if type(tree) == str and subject.lower() == tree.lower():
+                # print("Match!")
+                # print("list_dir [before]:", list_dir)
+                # print("curr_dir:", curr_dir)
+                list_dir.append(curr_dir[:])
+                # print("list_dir [after]:", list_dir)
+                return list_dir, opinion_dir
+        else:
+            if type(tree) == str and subject.lower() in tree.lower():
+                # print("Match!")
+                # print("list_dir [before]:", list_dir)
+                # print("curr_dir:", curr_dir)
+                list_dir.append(curr_dir[:])
+                # print("list_dir [after]:", list_dir)
+                return list_dir, opinion_dir
     # print("pre-return: ",list_dir)
     return list_dir, opinion_dir
 
 
 def generate_sentence_plan(choice, text, vp):
-    if conjugator.is_plural(choice[1]) and text == "a ":
+    if conjugator.plural(choice[1]) and text == "a ":
         text = ""
     if text == "a " and choice[1][0].lower() in ['a', 'e', 'i', 'o', 'u']:
         text = "an "
@@ -255,7 +274,7 @@ def generate_sentence_plan(choice, text, vp):
         'sc': text + choice[1]
     },
         'modifiers': {
-            'subj_plurality': conjugator.PLURAL if conjugator.is_plural(choice[0]) else conjugator.SINGULAR,
+            'subj_plurality': conjugator.PLURAL if conjugator.plural(choice[0]) else conjugator.SINGULAR,
             'vp_tense': conjugator.PRESENT_TENSE,
             'voice': conjugator.THIRD_PERSON
         }}
@@ -269,11 +288,3 @@ def describe_subject(subject, num_sentences):
     if len(plans) < num_sentences:
         plans.extend(plan_from_conceptnet(subject, num_sentences - len(plans)))
     return plans
-
-
-def answer_question(event):
-    a = 1
-
-
-def plan_response():
-    a = 1

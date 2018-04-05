@@ -1,11 +1,11 @@
-- name: PCNC1
+- name: 0
   actors: [Owl, Rabbit]
   location: Hundred Acre Wood
   verb: decide
   sc: to hold a picnic
   others: [Tigger, Pooh, Piglet, Eeyore, Roo, Kanga]
 
-- name: PCNC2
+- name: 1
   actors: [Rabbit]
   location: Hundred Acre Wood
   verb: volunteer
