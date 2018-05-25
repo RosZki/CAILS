@@ -17,6 +17,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONTEXT_DIR = os.path.join(BASE_DIR, 'context_files\\')
 MEMORY_DIR = os.path.join(BASE_DIR, 'memory_files\\')
 CFG_DIR = os.path.join(BASE_DIR, 'cfg_files\\')
+LOG_DIR = os.path.join(BASE_DIR, 'log_files\\')
 #MEMORY_DIR = os.path.join(BASE_DIR, 'memory_files\\memory\\')
 
 # Quick-start development settings - unsuitable for production

@@ -73,11 +73,18 @@ def plan_from_conceptnet(subject, num_sentences):
         for x in selection:
             text = random.choice(RELS_GEN[random_rel])
             if text == 'a ':
-                if conjugator.plural(x[1]):
+                if conjugator.plural(x[1])[0]:
                     text == ""
             plans.append(generate_sentence_plan(x, text, vp))
+
     return plans
 
+def plan_introduction_from_context():
+    pl = []
+    for evt in memory.CURRENT_CONTEXT['events']:
+        pl.append(plan_from_event('actors', evt))
+
+    return pl
 
 def plan_from_event(key, event_info, subject=""):
     init_plans = {'params': {
@@ -116,7 +123,7 @@ def plan_from_event(key, event_info, subject=""):
 
 
 def plan_from_memory(info, name, key="knowledge", subject=""):
-    print(info, name, key, subject)
+    #print(info, name, key, subject)
     if info == "events":
         context_info = chain_access([x for x in chain_access(memory.CURRENT_CONTEXT, [info]) if x['name'] == name], [0])
         memory_info = chain_access([x for x in chain_access(memory.CURRENT_MEMORY, [info]) if x['name'] == name], [0])
@@ -158,7 +165,7 @@ def plan_from_memory(info, name, key="knowledge", subject=""):
             'vp': 'be',
             'sc': text + context_info
         }, 'modifiers': {
-            'subj_plurality': conjugator.PLURAL if conjugator.is_plural(name) else conjugator.SINGULAR,
+            'subj_plurality': conjugator.PLURAL if conjugator.plural(name)[0] else conjugator.SINGULAR,
             'vp_tense': conjugator.PRESENT_TENSE,
             'voice': conjugator.THIRD_PERSON
         }}
@@ -190,14 +197,14 @@ def plan_randomly_from_memory(subject, num_sentences):
     # print("rand_plan_op_cont: ", chain_access(memory.CURRENT_CONTEXT, rand2))
     memory_dir, opinion_dir_mem = traverse_and_check(subject, memory.CURRENT_MEMORY, [], [], [])
     # print("mem: ", memory_dir)
-    print(memory_dir)
+    #print(memory_dir)
     for x in memory_dir:
         y = [z for z in list(memory.CURRENT_MEMORY[x[0]][x[1]].keys()) if z not in KEYS_TO_REMOVE]
         if len(y) < 1:
             break
-        print(x)
-        print(y)
-        print(memory.CURRENT_MEMORY)
+        #print(x)
+        #print(y)
+        #print(memory.CURRENT_MEMORY)
         pl = plan_from_memory(x[0], memory.CURRENT_MEMORY[x[0]][x[1]]['name'], random.choice(y))
         if not check_if_duplicate(pl, rand_plans):
             rand_plans.append(pl)
@@ -264,17 +271,18 @@ def traverse_and_check(subject, tree, curr_dir, list_dir, opinion_dir, equal=Tru
 
 
 def generate_sentence_plan(choice, text, vp):
-    if conjugator.plural(choice[1]) and text == "a ":
+    if conjugator.plural(choice[1])[0] and text == "a ":
         text = ""
     if text == "a " and choice[1][0].lower() in ['a', 'e', 'i', 'o', 'u']:
         text = "an "
+
     return {'params': {
         'subj': choice[0],
         'vp': vp,
         'sc': text + choice[1]
     },
         'modifiers': {
-            'subj_plurality': conjugator.PLURAL if conjugator.plural(choice[0]) else conjugator.SINGULAR,
+            'subj_plurality': conjugator.PLURAL if conjugator.plural(choice[0])[0] else conjugator.SINGULAR,
             'vp_tense': conjugator.PRESENT_TENSE,
             'voice': conjugator.THIRD_PERSON
         }}

@@ -137,22 +137,22 @@ def extract_info(input):
             memory.add_to_event_memory(subjs,vb,vp)
     else:
         #process question
-        q = t[0]
-        vb = t[1][0][0]
-        vb = conjugator.get_base_form(vb)
-        vp = " ".join(t[1][1].leaves())
-        get_keywords(stanford_pos(vp))
-        if vb not in IS_LIST:
-            if 'events' in memory.CURRENT_MEMORY.keys():
-                mem = [x for x in memory.CURRENT_MEMORY['events'] if x['verb'] == vb]
-            else:
-                mem = []
-            cont = [x for x in memory.CURRENT_CONTEXT['events'] if x ['verb'] == vb]
-
-
-        else:
-            # process w is ___ question
-            a = 1
+        #q = t[0]
+        #vb = t[1][0][0]
+        #vb = conjugator.get_base_form(vb)
+        #vp = " ".join(t[1][1].leaves())
+        #get_keywords(stanford_pos(vp))
+        #if vb not in IS_LIST:
+        #    if 'events' in memory.CURRENT_MEMORY.keys():
+        #        mem = [x for x in memory.CURRENT_MEMORY['events'] if x['verb'] == vb]
+        #    else:
+        #        mem = []
+        #    cont = [x for x in memory.CURRENT_CONTEXT['events'] if x ['verb'] == vb]
+        #
+        #
+        #else:
+        #    # process w is ___ question
+        a = 1
 
     print(memory.CURRENT_MEMORY)
     return [subjs,vb,vp_np,vp_jj]

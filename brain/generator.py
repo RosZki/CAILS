@@ -46,7 +46,7 @@ def generate_string_from_list(list):
         return ""
 
 
-def apply_pattern(pattern, params, modifiers):
+def apply_pattern(pattern, params, modifiers, capitalize):
     #print('In apply_pattern, params:', params)
     split_pattern = pattern.split()
     prev_status = False
@@ -56,7 +56,7 @@ def apply_pattern(pattern, params, modifiers):
             x = x[1:len(x) - 1]
         if x in params:
             if curr_sentence is "":
-                if not params[x][0].isupper():
+                if not params[x][0].isupper() and capitalize:
                     curr_sentence = params[x].capitalize()
                 else:
                     curr_sentence = params[x]
@@ -88,12 +88,12 @@ def get_point_of_view(noun):
         return conjugator.THIRD_PERSON
 
 
-def generate_simple_sentence(params={}, modifiers={}, default_sentence="I have no idea."):
+def generate_simple_sentence(params={}, modifiers={}, capitalize=True, default_sentence="I have no idea."):
     #print("params:", params)
     #print("modifiers: ", modifiers)
     if params == {} or modifiers == {}:
         return default_sentence
-    return apply_pattern(random.choice(get_valid_patterns(params.keys())), params, modifiers)
+    return apply_pattern(random.choice(get_valid_patterns(params.keys())), params, modifiers, capitalize)
 
 
 def generate_simple_question(subject, type):
@@ -102,7 +102,7 @@ def generate_simple_question(subject, type):
     else:
         return type.capitalize() + " " + conjugator.conjugate("be",
                                                               number=conjugator.SINGULAR if not
-                                                              conjugator.is_plural(subject) else
+                                                              conjugator.plural(subject)[0] else
                                                               conjugator.PLURAL,
                                                               person=conjugator.THIRD_PERSON,
                                                               tense=conjugator.PRESENT_TENSE) + " " + subject + "?"

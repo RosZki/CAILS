@@ -1,0 +1,39 @@
+<html>
+	<head>
+        {% load static %}
+        <link rel = 'stylesheet' type = 'text/css' href = '{% static 'css/components.css' %}'>
+	    <title>CAILS Messenger - Select a Context</title>
+    </head>
+
+	<script src='{% static 'js/jquery-3.2.1.min.js' %}'></script>
+    <script src='{% static "js/js.cookie.js" %}'></script>
+
+	<body>
+		<div class = 'chat-container book-select'>
+			<div class = 'chat-header for-book'>
+				<div class = 'header-container'>
+					<div class = 'scroll-text-container'>
+						<div class = 'scroll-arrow-text'>scroll to see the collection</div><label class = 'scroll-arrow'></label>
+					</div>
+					<div class = 'agent-name for-book-font'>Please choose a book to talk about.</div>
+				</div>
+			</div>
+
+			<div class = 'book-list horizontal-scroll-wrapper'>
+                {% for context in context_list %}<div class = 'entry'>
+                    <div class = 'book-photo'></div>
+                        <div class = 'book-info'>
+                            <div class = 'book-title'>{{ context.title }}</div>
+                            <div class = 'book-title book-narrator'>{{ context.character }}</div>
+                            <div class = 'book-title book-intro'>{{ context.text }}</div>
+                            <button class = 'go-book'>Converse</button>
+                            <a href="/messenger/converse/{{ context.id }}"></a>
+                        </div>
+				    </div>
+                {% endfor %}
+
+			</div>
+
+		</div>
+	</body>
+</html>

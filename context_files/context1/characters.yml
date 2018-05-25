@@ -12,10 +12,13 @@
   params:
     speech:
         stutter: 0
-        verbosity: 3
+        verbosity: 5
         however: 0.33
-        period: 0.33
         and: 0.33
+        i_think_start: 0.10
+        i_think_end: 0.10
+        not_sure: 0.10
+        recall_correctly: 0.10
     behavior:
         ignore: 0
         patience: 5

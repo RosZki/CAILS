@@ -2,7 +2,7 @@
 	<head>
         {% load static %}
         <link rel = 'stylesheet' type = 'text/css' href = '{% static 'css/components.css' %}'>
-	    <title>CAILS Messenger</title>
+	    <title>CAILS Messenger - Chat</title>
     </head>
 
 	<script src='{% static 'js/jquery-3.2.1.min.js' %}'></script>
@@ -68,7 +68,16 @@
                     url: '/messenger/ajax/process_message/',
                     data: JSON.stringify({'message': message}),
                     contentType: 'application/json'
-                });
+                }
+
+                var $save_log = $.ajax({
+                    type:'POST',
+                    url:'/____/ajax/generate_log'
+                })
+
+                $save_log.done(function(statement){
+                    alert(statement.message)
+                }))
 
                 $submit.done(function(statement){
                     $('#chat-area').append("<div class = 'chat-bubble-container'>\n" +
@@ -110,8 +119,14 @@
 			</div>
 
 			<div class = 'chat-box'>
-				<div class = 'chat-area' id='chat-area'></div>
-
+				<div class = 'chat-area' id='chat-area'>
+                    <div class = 'chat-bubble-container'>
+                        <div class = 'agent-icon'></div>
+                        <div class = 'chat-bubble agent'>
+                            {{ introduction }}
+                        </div>
+                    </div>
+                </div>
 			</div>
 
 			<div class = 'chat-footer'>

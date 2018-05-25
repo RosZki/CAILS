@@ -1,6 +1,7 @@
+from nltk.stem import WordNetLemmatizer
+
 from brain.conjugator import regex_rule
 from brain.conjugator import rule
-from nltk.stem import WordNetLemmatizer
 
 PAST_TENSE_RULE = "pastTense"
 PRESENT_TENSERULE = "presentTense"
@@ -318,10 +319,10 @@ PRESENT_TENSE_RULES = [
 PAST_PARTICIPLE_RULES = [regex_rule.RegexRule(CONS + "y$", 1, "ied", 1),
                          regex_rule.RegexRule("^" + VERBAL_PREFIX + "?(bring)$", 3, "ought", 0),
                          regex_rule.RegexRule("^" + VERBAL_PREFIX
-                                             + "?(take|rise|strew|blow|draw|drive|know|give|sake|"
-                                             + "arise|gnaw|grave|grow|hew|know|mow|see|sew|throw|"
-                                             + "partake|prove|saw|quartersaw|shake|shew|show|shrive|"
-                                             + "sightsee|strew|strive)$", 0, "n", 0),
+                                              + "?(take|rise|strew|blow|draw|drive|know|give|sake|"
+                                              + "arise|gnaw|grave|grow|hew|know|mow|see|sew|throw|"
+                                              + "partake|prove|saw|quartersaw|shake|shew|show|shrive|"
+                                              + "sightsee|strew|strive)$", 0, "n", 0),
                          regex_rule.RegexRule("^" + VERBAL_PREFIX + "?[gd]o$", 0, "ne", 1),
                          regex_rule.RegexRule("^(beat|eat|be|fall)$", 0, "en", 0),
                          regex_rule.RegexRule("^(have)$", 2, "d", 0),
@@ -332,10 +333,10 @@ PAST_PARTICIPLE_RULES = [regex_rule.RegexRule(CONS + "y$", 1, "ied", 1),
                          regex_rule.RegexRule("(sink|slink|drink|shrink|stink)$", 3, "unk", 0),
                          regex_rule.RegexRule("(([sfc][twlp]?r?|w?r)ing|hang)$", 3, "ung", 0),
                          regex_rule.RegexRule("^" + VERBAL_PREFIX + "?(shear|swear|bear|wear|tear)$", 3,
-                                             "orn", 0),
+                                              "orn", 0),
                          regex_rule.RegexRule("^" + VERBAL_PREFIX + "?(bend|spend|send|lend)$", 1, "t", 0),
                          regex_rule.RegexRule("^" + VERBAL_PREFIX + "?(weep|sleep|sweep|creep|keep$)$",
-                                             2, "pt", 0),
+                                              2, "pt", 0),
                          regex_rule.RegexRule("^" + VERBAL_PREFIX + "?(sell|tell)$", 3, "old", 0),
                          regex_rule.RegexRule("^(outfight|beseech)$", 4, "ought", 0),
                          regex_rule.RegexRule("^bethink$", 3, "ought", 0),
@@ -380,7 +381,7 @@ PAST_PARTICIPLE_RULES = [regex_rule.RegexRule(CONS + "y$", 1, "ied", 1),
                          regex_rule.RegexRule("^dwell$", 2, "lt", 0),
                          regex_rule.RegexRule("^enwind$", 3, "ound", 0),
                          # new Patternrule.Rule("^feed$", 4, "fed", 0),
-                        regex_rule.RegexRule("^feel$", 3, "elt", 0),
+                         regex_rule.RegexRule("^feel$", 3, "elt", 0),
                          regex_rule.RegexRule("^flee$", 2, "ed", 0),
                          regex_rule.RegexRule("^floodlight$", 5, "lit", 0),
                          regex_rule.RegexRule("^fly$", 1, "own", 0),
@@ -399,7 +400,7 @@ PAST_PARTICIPLE_RULES = [regex_rule.RegexRule(CONS + "y$", 1, "ied", 1),
                          regex_rule.RegexRule("^grind$", 3, "ound", 0),
                          regex_rule.RegexRule("^hacksaw", 0, "n", 0),
                          # new Patternrule.Rule("^handfeed$", 4, "fed", 0),
-                        regex_rule.RegexRule("^hear", 0, "d", 0),
+                         regex_rule.RegexRule("^hear", 0, "d", 0),
                          regex_rule.RegexRule("^hold$", 3, "eld", 0),
                          regex_rule.RegexRule("^hide$", 1, "den", 0),
                          regex_rule.RegexRule("^honey$", 2, "ied", 0),
@@ -485,7 +486,7 @@ PAST_PARTICIPLE_RULES = [regex_rule.RegexRule(CONS + "y$", 1, "ied", 1),
                          regex_rule.RegexRule("^unbind$", 3, "ound", 0),
                          regex_rule.RegexRule("^underbuy$", 2, "ought", 0),
                          # new Patternrule.Rule("^underfeed$", 4, "fed", 0),
-                        regex_rule.RegexRule("^undergird$", 3, "irt", 0),
+                         regex_rule.RegexRule("^undergird$", 3, "irt", 0),
                          regex_rule.RegexRule("^undergo$", 1, "one", 0),
                          regex_rule.RegexRule("^underlie$", 2, "ain", 0),
                          regex_rule.RegexRule("^undershoot$", 4, "hot", 0),
@@ -505,7 +506,7 @@ PAST_PARTICIPLE_RULES = [regex_rule.RegexRule(CONS + "y$", 1, "ied", 1),
                          regex_rule.RegexRule("^waylay$", 2, "ain", 0),
                          regex_rule.RegexRule("^whipsaw$", 2, "awn", 0),
                          # new Patternrule.Rule("^winterfeed$", 4, "fed", 0),
-                        regex_rule.RegexRule("^withhold$", 3, "eld", 0),
+                         regex_rule.RegexRule("^withhold$", 3, "eld", 0),
                          regex_rule.RegexRule("^withstand$", 3, "ood", 0),
                          regex_rule.RegexRule("^win$", 3, "won", 0),
                          regex_rule.RegexRule("^wind$", 3, "ound", 0),
@@ -515,13 +516,13 @@ PAST_PARTICIPLE_RULES = [regex_rule.RegexRule(CONS + "y$", 1, "ied", 1),
                          regex_rule.RegexRule("^ko$", 1, "o'd", 0),
                          regex_rule.RegexRule("^win$", 2, "on", 0),
                          regex_rule.RegexRule("e$", 0, "d", 1),  # DH
-                        regex_rule.RegexRule(
-                            "^"
-                            + VERBAL_PREFIX
-                            + "?(cast|thrust|typeset|cut|bid|upset|wet|bet|cut|"
-                            + "hit|hurt|inset|let|cost|burst|beat|beset|set|upset|hit|"
-                            + "offset|put|quit|wed|typeset|wed|spread|split|slit|read|run|shut|shed)$",
-                            0, "", 0)
+                         regex_rule.RegexRule(
+                             "^"
+                             + VERBAL_PREFIX
+                             + "?(cast|thrust|typeset|cut|bid|upset|wet|bet|cut|"
+                             + "hit|hurt|inset|let|cost|burst|beat|beset|set|upset|hit|"
+                             + "offset|put|quit|wed|typeset|wed|spread|split|slit|read|run|shut|shed)$",
+                             0, "", 0)
                          ]
 
 ING_FORM_RULES = [
@@ -802,7 +803,6 @@ def apply(rule, verb):
 
 def conjugate(verb, number=None, person=None, tense=None, modal=None,
               form=None, passive=False, progressive=False, perfect=False, interrogative=False):
-
     if number is None:
         number = SINGULAR
     if person is None:
@@ -867,15 +867,18 @@ def conjugate(verb, number=None, person=None, tense=None, modal=None,
 
     return " ".join(conjugate_stack).strip()
 
+
 def plural(word):
     split = word.split()
     if len(split) > 1:
-        word = split[len(split)-1]
-    word = word.lower()
+        word = split[len(split) - 1]
+    wordl = word.lower()
     wnl = WordNetLemmatizer()
-    lemma = wnl.lemmatize(word, 'n')
-    plural = True if word is not lemma else False
+    lemma = wnl.lemmatize(wordl, 'n')
+    plural = True if wordl is not lemma else False
+    print("plural check:", wordl, plural)
     return plural, lemma
+
 
 def base_form(word):
     split = word.split()

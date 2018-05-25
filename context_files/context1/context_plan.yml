@@ -1,4 +1,16 @@
+description:
+  title: Planning a Picnic
+  character: Winnie the Pooh
+  text: Help Pooh plan a picnic!
+
+state:
+  topics: [picnic, food, drink]
+  location: Hundred Acre Wood
+  character: Pooh
+  others:
+    Hundred Acre Woods: [Piglet, Rabbit, Owl, Kanga, Roo, Eeyore, Tigger]
+
 goals:
-    - location: ""
-    - people: []
-    - food: []
+    location: ""
+    people: []
+    food: []
