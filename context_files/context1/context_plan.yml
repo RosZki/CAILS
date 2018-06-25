@@ -10,7 +10,4 @@ state:
   others:
     Hundred Acre Woods: [Piglet, Rabbit, Owl, Kanga, Roo, Eeyore, Tigger]
 
-goals:
-    location: ""
-    people: []
-    food: []
+goals: [[location, location, 1],[person, characters, 3+],[food, IsA, 3+],[drink, IsA, 1+]]

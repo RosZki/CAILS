@@ -8,6 +8,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from CAILS.settings import CONTEXT_DIR
 from brain import logger
 from brain import memory
+from brain.conjugator import conjugator
 
 from brain import dialogue_manager
 
@@ -23,6 +24,7 @@ def index(request):
     #print("final: ", sentence_planner.traverse_and_check("university", memory.CURRENT_CONTEXT, [],[]))
     #print(sentence_planner.plan_randomly_from_memory("", 2))
     #memory.save_memory("memory1.yml")
+    print("CONJUGATE TEST: ", conjugator.conjugate("be", number=conjugator.SINGULAR, tense=conjugator.PRESENT_TENSE))
     return render(request, 'messenger/index.html', context)
 
 def select(request):
@@ -39,6 +41,7 @@ def select(request):
 def converse(request, context_id):
     #memory.read_context(context_id)
     #context = {'introduction':dialogue_manager.introduce()}
+    context = {}
     logger.save_log()
     return render(request, 'messenger/converse.html', context)
 

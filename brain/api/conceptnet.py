@@ -43,3 +43,8 @@ def query(concept, position, relation, weight=2.0):
             requests.get(BASE_CONCEPT_NET_URL +
                          'query?' + position + '=/c/en/' +
                          proper_format(concept) + '&rel=/r/' + relation).json()['edges'] if x['weight'] >= weight]
+
+def check_if_connection(concept1, concept2, relation):
+    return len(requests.get(BASE_CONCEPT_NET_URL + 'query?node=/c/en/' +
+                 proper_format(concept1) + '&rel=/r/' + relation +
+                 "&other=/c/en/" + proper_format(concept2)).json()['edges']) > 0

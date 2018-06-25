@@ -296,3 +296,45 @@ def describe_subject(subject, num_sentences):
     if len(plans) < num_sentences:
         plans.extend(plan_from_conceptnet(subject, num_sentences - len(plans)))
     return plans
+
+
+def describe_current_goal():
+    g = memory.get_curr_goal()
+    if int(g[2]) - memory.get_curr_progress_num() == 1:
+        sc = "a kind of " + g[0]
+
+    else:
+        sc = str(int(g[2]) - memory.get_curr_progress_num()) + " kinds of " + g[0]
+
+    return { 'params':{
+        'subj': "what we need",
+        'vp': "be",
+        'sc':  sc
+    },
+        'modifiers':{
+            'subj_plurality': conjugator.SINGULAR,
+            'vp_tense': conjugator.PRESENT_TENSE,
+            'voice': conjugator.THIRD_PERSON
+        }
+    }
+
+
+def describe_current_plan():
+    return " ".join([" ".join(x) for x in memory.PROGRESS])
+
+def agree_on_valid_subjects(valid):
+    return {'params': {
+        'subj': generate_string_from_list(valid),
+        'vp': "be",
+        'sc': "good"
+    },
+        'modifiers': {
+            'subj_plurality': conjugator.PLURAL if len(valid) > 1 else conjugator.SINGULAR,
+            'vp_tense': conjugator.PRESENT_TENSE,
+            'voice': conjugator.THIRD_PERSON
+        }
+    }
+
+def verify_if_goal(topic):
+    g = memory.get_curr_goal()
+    return "Is " + topic + " a " + g[0] + "? "

@@ -3,7 +3,7 @@ from brain import interpreter
 from brain.planner import response_planner
 
 def introduce():
-    return response_planner.plan_introduction()
+    return response_planner.plan_introduction(memory.get_curr_character_params())
 
 def reply(input):
     kw = interpreter.get_keywords(interpreter.stanford_pos(input))

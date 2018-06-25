@@ -1,0 +1,101 @@
+- name: Pooh
+  type: bear
+  personality:
+      extraversion: 0.75
+      neuroticism: 0
+      openness: 1
+      conscientiousness: 0
+      agreeableness: 1
+  knowledge:
+    Piglet:
+        IsA: [friend, ally]
+  params:
+    speech:
+        stutter: 0
+        #content
+        verbosity: 3
+        word_complexity: 0
+        #conjuction
+        however: 0.10
+        and: 0.20
+        #hedgers
+        i_think_start: 0.05
+        i_think_end: 0.05
+        not_sure: 0.05
+        recall_correctly: 0.05
+    behavior:
+        ignore: 0
+        patience: 5
+
+- name: Piglet
+  type: piglet
+  personality:
+      extraversion: 0.25
+      neuroticism: -1
+      openness: 1
+      conscientiousness: 0
+      agreeableness: 1
+  knowledge:
+    Pooh:
+        IsA: [friend, ally]
+  params:
+    speech:
+        stutter: 0.5
+        #content
+        verbosity: 2
+        word_complexity: 1
+        #conjuction
+        however: 0.33
+        and: 0.33
+        #hedgers
+        i_think_start: 0.15
+        i_think_end: 0.15
+        not_sure: 0.40
+        recall_correctly: 0.10
+    behavior:
+        ignore: 0
+        patience: 5
+
+- name: Rabbit
+  type: rabbit
+  personality:
+      extraversion: 0
+      neuroticism: -0.75
+      openness: 0.25
+      conscientiousness: 1
+      agreeableness: -0.25
+  knowledge:
+    Piglet:
+        IsA: [friend, ally]
+  params:
+    speech:
+        stutter: 0.01
+        #content
+        verbosity: 5
+        word_complexity: 0
+        #conjuction
+        however: 0.33
+        and: 0.33
+        #hedgers
+        i_think_start: 0.30
+        i_think_end: 0.30
+        not_sure: 0.01
+        recall_correctly: 0.05
+    behavior:
+        ignore: 3
+        patience: 0
+
+- name: Owl
+  type: owl
+
+- name: Tigger
+  type: tigger
+
+- name: Eeyore
+
+- name: Kanga
+
+- name: Roo
+
+- name: Christopher Robin
+

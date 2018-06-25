@@ -2,7 +2,10 @@ import random
 
 from brain import generator
 from brain import interpreter
+from brain import memory
 from brain.planner import sentence_planner
+
+to_verify = []
 
 
 def add_additional_modifiers(plan, modifiers):
@@ -16,8 +19,11 @@ def pop_random(lst):
 
 
 def collate(plans):
+    print("PLAN CHECK", plans)
     if len(plans) == 1 and (plans[0]['params'] == {} or plans[0]['modifiers'] == {}):
-        return plans
+        return [plans]
+    elif len(plans) == 1:
+        return [plans]
     list_plans = plans[:]
     collated_plans = []
     list_of_subjects = list(set([x['params']['subj'].lower() for x in list_plans]))
@@ -54,7 +60,9 @@ def finalize_output(collated_plans, dict_conj, dict_hedgers):
     ns = d2['not_sure']
     rc = d2['recall_correctly']
     default = generator.generate_simple_sentence()
+    print("COLLATED", collated_plans)
     for x in collated_plans:
+        print("LEN: ", len(x))
         rand = random.random()
         rand2 = random.random()
         if len(x) == 1:
@@ -123,11 +131,52 @@ def plan_response(message, params):
     #final_message = []
     tagged = interpreter.stanford_pos(message)
     keywords = interpreter.consolidate(interpreter.get_keywords(tagged))
-
-    topic = random.choice(keywords)
-
-    plans = sentence_planner.describe_subject(topic, params['speech']['verbosity'])
+    valid = []
+    p = None
+    global to_verify
+    if len(to_verify) > 0:
+        if "yes" in message.lower():
+            done = memory.add_to_progress([to_verify[0]])
+            to_verify = to_verify[1:]
+            if done:
+                final = memory.move_progress()
+                to_verify = to_verify[:]
+                if final:
+                    return sentence_planner.describe_current_plan()
+            if p != None:
+                plans = [p]
+                plans.append(sentence_planner.describe_current_goal())
+            else:
+                plans = [sentence_planner.describe_current_goal()]
+        else:
+            plans = [sentence_planner.describe_current_goal()]
+    else:
+        topic = random.choice(keywords)
+        for x in keywords:
+            if memory.check_if_valid_goal(x):
+                valid.append(x)
+            else:
+                to_verify.append(x)
+        if len(valid) > 0:
+            p = sentence_planner.agree_on_valid_subjects(valid)
+            done = memory.add_to_progress(valid)
+            if done:
+                final = memory.move_progress()
+                to_verify = to_verify[:]
+                if final:
+                    return sentence_planner.describe_current_plan()
+                if len(to_verify) > 0:
+                    return stutter(sentence_planner.verify_if_goal(to_verify[0]), params['speech']['stutter'])
+            if len(to_verify) > 0:
+                return stutter(sentence_planner.verify_if_goal(to_verify[0]), params['speech']['stutter'])
+            else:
+                plans = [sentence_planner.describe_current_goal()]
+        else:
+            if len(to_verify) > 0:
+                return stutter(sentence_planner.verify_if_goal(to_verify[0]), params['speech']['stutter'])
+            plans = sentence_planner.describe_subject(topic, params['speech']['verbosity'])
     # print(plans)
+    print("PLANS: ", plans)
     if len(plans) > 1:
         plans[:] = [x for x in plans if x != {'params': {}, 'modifiers': {}}]
     print("plans:", plans)
@@ -147,10 +196,31 @@ def plan_response(message, params):
     output = stutter(output, params['speech']['stutter'])
     return output
 
-def plan_introduction():
+
+def plan_introduction(params):
     final_message = []
     plans = sentence_planner.plan_introduction_from_context()
+    plans.append(sentence_planner.describe_current_goal())
+
     for x in plans:
         final_message.append(generator.generate_simple_sentence(x['params'],x['modifiers']))
 
     return " ".join(final_message)
+
+    #return stutter(finalize_output(collate(plans), {
+    #    'however': params['speech']['however'],
+    #    'and': params['speech']['and']
+    #},{
+    #    'i_think_start': params['speech']['i_think_start'],
+    #    'i_think_end': params['speech']['i_think_end'],
+    #    'not_sure': params['speech']['not_sure'],
+    #    'recall_correctly': params['speech']['recall_correctly']
+    #}) + " " + finalize_output(collate([sentence_planner.describe_current_goal()]), {
+    #    'however': params['speech']['however'],
+    #    'and': params['speech']['and']
+    #},{
+    #    'i_think_start': params['speech']['i_think_start'],
+    #    'i_think_end': params['speech']['i_think_end'],
+    #    'not_sure': params['speech']['not_sure'],
+    #    'recall_correctly': params['speech']['recall_correctly']
+    #}), params['speech']['stutter'])
