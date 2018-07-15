@@ -1,0 +1,29 @@
+description:
+  title: Planning a Picnic
+  characters: Winnie the Pooh, Piglet, and Rabbit
+  text: Join Pooh, Piglet, and Rabbit as they plan a picnic!
+
+state:
+  topics: [picnic, food, drink]
+  location: Hundred Acre Wood
+  characters: [Pooh, Piglet, Rabbit]
+  others:
+    Hundred Acre Woods: [Owl, Kanga, Roo, Eeyore, Tigger]
+
+goals: [[location, location, 1],[person, characters, 6+],[food, IsA, 3+],[drink, IsA, 1+]]
+
+initial_plan: [[],[Piglet, Rabbit, Pooh], [], []]
+
+display:
+    Pooh:
+      name: Pooh
+      class_id: pooh-chat
+      agent_icon: pooh
+    Piglet:
+      name: Piglet
+      class_id: piglet-chat
+      agent_icon: piglet
+    Rabbit:
+      name: Rabbit
+      class_id: rabbit-chat
+      agent_icon: rabbit

@@ -1,7 +1,7 @@
 import re
 
-class RegexRule:
 
+class RegexRule:
     EXCEPTION = 0
     GENERIC = 1
     DEFAULT = 2
@@ -26,7 +26,7 @@ class RegexRule:
 
     def fire(self, word):
         word = word.strip()
-        return word[0:len(word)-self.offset] + self.suffix
+        return word[0:len(word) - self.offset] + self.suffix
 
     def analyze(self, word):
         if self.suffix != "" and word.endswith(self.suffix):

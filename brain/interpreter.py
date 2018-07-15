@@ -1,14 +1,15 @@
 import nltk
-from nltk.tag.stanford import CoreNLPPOSTagger
 from nltk.parse.corenlp import CoreNLPParser
+from nltk.tag.stanford import CoreNLPPOSTagger
 from pycorenlp import StanfordCoreNLP
+
 from brain import memory
 from brain.conjugator import conjugator
-from brain.planner.sentence_planner import traverse_and_check
 
 DEFAULT_TAGS = ['NNP', 'NNPS', 'NN', 'NNS']
 KEYWORD_TAGS = DEFAULT_TAGS[:]
-KEYWORD_TAGS.extend(['VBG', 'PRP', 'PRP$', 'WP', 'WP$', 'WRB', 'WDT'])
+KEYWORD_TAGS.extend(['VBG'])
+#KEYWORD_TAGS.extend(['VBG', 'PRP', 'PRP$', 'WP', 'WP$', 'WRB', 'WDT'])
 
 STANFORD_TAGGER = CoreNLPPOSTagger('http://localhost:9000/')
 STANFORD_SERVER = StanfordCoreNLP('http://localhost:9000/')
@@ -81,6 +82,7 @@ def get_sentence_structure(input):
 def extract_question(input):
     a = 1
 
+
 def get_labels(tree):
     return [x.label() if type(x) == nltk.Tree else x for x in tree] if type(tree) == nltk.Tree else []
 
@@ -117,32 +119,36 @@ def extract_info(input):
     vp_np = []
     vp_jj = []
     if t.label() == "S":
-        subjs = extract_all(t[0], "NP", old=t[0])
-        vb = t[1][0][0]
-        vb = conjugator.base_form(vb)
-        vp_np = extract_all(t[1], "NP")
-        vp_jj = extract_all(t[1], "JJ")
-        vp = " ".join(t[1].leaves())
-        print("SUBJ:", subjs)
-        print("VB:", vb)
-        print("VP_NPL", vp_np)
-        print("VP_JJ:", vp_jj)
-        if vb in IS_LIST:
-            for x in subjs:
-                for y in vp_np:
-                    memory.add_to_character_memory(x, 'IsA', y)
-                for y in vp_jj:
-                    memory.add_to_character_memory(x, 'HasProperty', y)
-        else:
-            memory.add_to_event_memory(subjs,vb,vp)
+        try:
+            subjs = extract_all(t[0], "NP", old=t[0])
+            vb = t[1][0][0]
+            vb = conjugator.base_form(vb)
+            vp_np = extract_all(t[1], "NP")
+            vp_jj = extract_all(t[1], "JJ")
+            vp = " ".join(t[1].leaves())
+            print("SUBJ:", subjs)
+            print("VB:", vb)
+            print("VP_NPL", vp_np)
+            print("VP_JJ:", vp_jj)
+            if vb in IS_LIST:
+                for x in subjs:
+                    for y in vp_np:
+                        memory.add_to_character_memory(x, 'IsA', y)
+                    for y in vp_jj:
+                        memory.add_to_character_memory(x, 'HasProperty', y)
+            else:
+                memory.add_to_event_memory(subjs, vb, vp)
+        except:
+            print("ERROR in extracting info!")
+            pass
     else:
-        #process question
-        #q = t[0]
-        #vb = t[1][0][0]
-        #vb = conjugator.get_base_form(vb)
-        #vp = " ".join(t[1][1].leaves())
-        #get_keywords(stanford_pos(vp))
-        #if vb not in IS_LIST:
+        # process question
+        # q = t[0]
+        # vb = t[1][0][0]
+        # vb = conjugator.get_base_form(vb)
+        # vp = " ".join(t[1][1].leaves())
+        # get_keywords(stanford_pos(vp))
+        # if vb not in IS_LIST:
         #    if 'events' in memory.CURRENT_MEMORY.keys():
         #        mem = [x for x in memory.CURRENT_MEMORY['events'] if x['verb'] == vb]
         #    else:
@@ -150,9 +156,9 @@ def extract_info(input):
         #    cont = [x for x in memory.CURRENT_CONTEXT['events'] if x ['verb'] == vb]
         #
         #
-        #else:
+        # else:
         #    # process w is ___ question
         a = 1
 
     print(memory.CURRENT_MEMORY)
-    return [subjs,vb,vp_np,vp_jj]
+    return [subjs, vb, vp_np, vp_jj]

@@ -1,0 +1,6 @@
+- name: 0
+  actors: [Owl]
+  location: Hundred Acre Wood
+  verb: decide
+  sc: to build a brand new house
+  others: [Rabbit, Tigger, Pooh, Piglet, Eeyore, Roo, Kanga]

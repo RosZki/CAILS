@@ -1,5 +1,6 @@
-from brain.conjugator import conjugator
 import random
+
+from brain.conjugator import conjugator
 
 SENTENCE_PATTERNS = [
     "[adv_time] [,] [adj_subj] subj [prep_subj] [adv_manner] vp [adv_place]",
@@ -47,7 +48,7 @@ def generate_string_from_list(list):
 
 
 def apply_pattern(pattern, params, modifiers, capitalize):
-    #print('In apply_pattern, params:', params)
+    # print('In apply_pattern, params:', params)
     split_pattern = pattern.split()
     prev_status = False
     curr_sentence = ""
@@ -89,8 +90,8 @@ def get_point_of_view(noun):
 
 
 def generate_simple_sentence(params={}, modifiers={}, capitalize=True, default_sentence="I have no idea."):
-    #print("params:", params)
-    #print("modifiers: ", modifiers)
+    # print("params:", params)
+    # print("modifiers: ", modifiers)
     if params == {} or modifiers == {}:
         return default_sentence
     return apply_pattern(random.choice(get_valid_patterns(params.keys())), params, modifiers, capitalize)

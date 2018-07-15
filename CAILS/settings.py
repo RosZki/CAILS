@@ -18,7 +18,7 @@ CONTEXT_DIR = os.path.join(BASE_DIR, 'context_files\\')
 MEMORY_DIR = os.path.join(BASE_DIR, 'memory_files\\')
 CFG_DIR = os.path.join(BASE_DIR, 'cfg_files\\')
 LOG_DIR = os.path.join(BASE_DIR, 'log_files\\')
-#MEMORY_DIR = os.path.join(BASE_DIR, 'memory_files\\memory\\')
+# MEMORY_DIR = os.path.join(BASE_DIR, 'memory_files\\memory\\')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -30,7 +30,6 @@ SECRET_KEY = '*3h0xwyl^sv+m_d3jk6g%6$pvy#nqxisr$l)k4sfup!)xa)6+m'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -78,7 +77,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'CAILS.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
@@ -88,7 +86,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'CAILS-Database'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -108,7 +105,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
@@ -121,7 +117,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/

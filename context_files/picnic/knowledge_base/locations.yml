@@ -1,0 +1,17 @@
+- name: Hundred Acre Wood
+  type: forest
+
+- name: Pooh's House
+  type : house
+
+- name: Christopher Robin's Room
+  type: room
+
+- name: Piglet's House
+  type: house
+
+- name: Rabbit's House
+  type: house
+
+- name: Tigger's House
+  type: house

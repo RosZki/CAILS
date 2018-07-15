@@ -1,0 +1,112 @@
+- name: Pooh
+  type: bear
+  personality:
+      extraversion: 0.75
+      neuroticism: 0
+      openness: 1
+      conscientiousness: 0
+      agreeableness: 1
+  knowledge:
+    Piglet:
+        IsA: [friend, ally]
+  params:
+    speech:
+        stutter: 0
+        #content
+        verbosity: 3
+        word_complexity: 0
+        #conjuction
+        however: 0.10
+        and: 0.20
+        #hedgers
+        i_think_start: 0.05
+        i_think_end: 0.05
+        not_sure: 0.05
+        recall_correctly: 0.05
+        #comment_on_suggestion
+        agree: 0.90
+        disagree: 0.05
+    behavior:
+        assertiveness: -0.25
+
+
+- name: Piglet
+  type: piglet
+  personality:
+      extraversion: 0.25
+      neuroticism: -1
+      openness: 1
+      conscientiousness: 0
+      agreeableness: 1
+  knowledge:
+    Pooh:
+        IsA: [friend, ally]
+  params:
+    speech:
+        stutter: 0.5
+        #content
+        verbosity: 2
+        word_complexity: 1
+        #conjuction
+        however: 0.33
+        and: 0.33
+        #hedgers
+        i_think_start: 0.15
+        i_think_end: 0.15
+        not_sure: 0.40
+        recall_correctly: 0.10
+        #comment_on_suggestion
+        agree: 0.05
+        disagree: 0.80
+    behavior:
+        assertiveness: -1
+
+- name: Rabbit
+  type: rabbit
+  personality:
+      extraversion: 0
+      neuroticism: -0.75
+      openness: 0.25
+      conscientiousness: 1
+      agreeableness: -0.25
+  knowledge:
+    Piglet:
+        IsA: [friend, ally]
+  params:
+    speech:
+        stutter: 0.01
+        #content
+        verbosity: 5
+        word_complexity: 0
+        #conjuction
+        however: 0.33
+        and: 0.33
+        #hedgers
+        i_think_start: 0.30
+        i_think_end: 0.30
+        not_sure: 0.01
+        recall_correctly: 0.05
+        #comment_on_suggestion
+        agree: 0.05
+        disagree: 0.70
+    behavior:
+        assertiveness: 0.75
+
+- name: Owl
+  type: owl
+
+- name: Tigger
+  type: tiger
+
+- name: Eeyore
+  type: donkey
+
+- name: Kanga
+  type: kangaroo
+
+- name: Roo
+  type: kangaroo
+
+- name: Christopher Robin
+  type: human
+

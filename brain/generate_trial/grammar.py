@@ -1,4 +1,5 @@
 from ruamel.yaml import YAML
+
 from CAILS.settings import CFG_DIR
 
 starting_nodes = []
@@ -6,6 +7,7 @@ branch_nodes = []
 terminal_nodes = []
 path_to_terminal = []
 CURRENT_CFG = {}
+
 
 def read_cfg_file(cfg_name):
     yaml = YAML(typ='safe')

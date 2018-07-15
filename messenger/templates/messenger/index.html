@@ -1,139 +1,194 @@
 <html>
-	<head>
-        {% load static %}
-        <link rel = 'stylesheet' type = 'text/css' href = '{% static 'css/components.css' %}'>
-	    <title>CAILS Messenger - Chat</title>
-    </head>
+<head>
+    {% load static %}
+    <link rel='stylesheet' type='text/css' href='{% static 'css/components.css' %}'>
+    <title>CAILS Messenger - Chat</title>
+</head>
 
-	<script src='{% static 'js/jquery-3.2.1.min.js' %}'></script>
-    <script src='{% static "js/js.cookie.js" %}'></script>
-	<script>
-		$(document).ready(function () {
-			var observe;
-			if (window.attachEvent) {
-				observe = function (element, event, handler) {
-					element.attachEvent('on'+event, handler);
-				};
-			}
-			else {
-				observe = function (element, event, handler) {
-					element.addEventListener(event, handler, false);
-				};
-			}
-			function init() {
-				var text = document.getElementById('message');
-				function resize () {
-					text.style.height = 'auto';
-					text.style.height = -15 + text.scrollHeight+'px';
-				}
-				/* 0-timeout to get the already changed text */
-				function delayedResize () {
-					window.setTimeout(resize, 0);
-				}
-				observe(text, 'change',  resize);
-				observe(text, 'cut',     delayedResize);
-				observe(text, 'paste',   delayedResize);
-				observe(text, 'drop',    delayedResize);
-				observe(text, 'keydown', delayedResize);
+<script src='{% static 'js/jquery-3.2.1.min.js' %}'></script>
+<script src='{% static "js/js.cookie.js" %}'></script>
 
-				text.focus();
-				text.select();
-				resize();
-			}
+<script>
+    $(document).ready(function () {
+        $(".message-container").focus(function () {
+            if (this.value === this.defaultValue) {
+                this.value = '';
+            }
+        })
+            .blur(function () {
+                if (this.value === '') {
+                    this.value = this.defaultValue;
+                }
+            });
 
-			var csrftoken = Cookies.get('csrftoken');
+        var observe;
+        if (window.attachEvent) {
+            observe = function (element, event, handler) {
+                element.attachEvent('on' + event, handler);
+            };
+        }
+        else {
+            observe = function (element, event, handler) {
+                element.addEventListener(event, handler, false);
+            };
+        }
 
-			function csrfSafeMethod(method){
-			    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        function init() {
+            var text = document.getElementById('message');
+
+            function resize() {
+                text.style.height = 'auto';
+                text.style.height = -15 + text.scrollHeight + 'px';
             }
 
-            $.ajaxSetup({
-                beforeSend: function(xhr, settings){
-                    if(!csrfSafeMethod(settings.type) && !this.crossDomain){
-                        xhr.setRequestHeader('X-CSRFToken', csrftoken);
+            /* 0-timeout to get the already changed text */
+            function delayedResize() {
+                window.setTimeout(resize, 0);
+            }
+
+            observe(text, 'change', resize);
+            observe(text, 'cut', delayedResize);
+            observe(text, 'paste', delayedResize);
+            observe(text, 'drop', delayedResize);
+            observe(text, 'keydown', delayedResize);
+
+            text.focus();
+            text.select();
+            resize();
+        }
+
+        var csrftoken = Cookies.get('csrftoken');
+
+        function csrfSafeMethod(method) {
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        $.ajaxSetup({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader('X-CSRFToken', csrftoken);
+                }
+            }
+        });
+
+        function sendMessage() {
+            var message = $('#message').val();
+            $('#chat-area').append("<div class = 'chat-bubble-container'>\n" +
+                "\t\t\t\t\t\t" + "<div class = 'chat-bubble' id ='user'>\n" +
+                "\t\t\t\t\t\t\t" + message + "\n" +
+                "\t\t\t\t\t\t" + "</div>\n" +
+                "\t\t\t\t\t" + "</div>");
+
+            var $submit = $.ajax({
+                type: 'POST',
+                url: '/messenger/ajax/process_message/',
+                data: JSON.stringify({'message': message}),
+                contentType: 'application/json'
+            });
+
+            $submit.done(function (response) {
+                response.data.forEach(
+                    function (data) {
+                        if (data.flag) {
+                            $('#chat-area').append("<div class = 'chat-bubble-container'>\n" +
+                                "\t\t\t\t\t\t<div class = 'agent-icon " + data.icon + "'></div>\n" +
+                                "\t\t\t\t\t\t<div class = 'chat-bubble-box'>\n" +
+                                "\t\t\t\t\t\t\t<div class = 'name-bubble'>" + data.name + "</div>\n" +
+                                "\t\t\t\t\t\t\t<div class = 'chat-bubble' id = '" + data.id + "'>\n" +
+                                data.message +
+                                "\t\t\t\t\t\t\t</div>\n" +
+                                "\t\t\t\t\t\t</div>\n" +
+                                "\t\t\t\t\t</div>");
+                        }
+                        else {
+                            $('#chat-area').append("<div class = 'chat-bubble-container'>\n" +
+                                "\t\t\t\t\t\t<div class = 'system-message' id = 'agent'>\n" +
+                                data.message +
+                                "\t\t\t\t\t\t</div>\n" +
+                                "\t\t\t\t\t</div>")
+                        }
+
                     }
-                }
+                )
+                $('#chat-area')[0].scrollTop = $('#chat-area')[0].scrollHeight;
             });
 
-			function sendMessage(){
-			    var message = $('#message').val();
-                $('#chat-area').append("<div class = 'chat-bubble-container'>\n" +
-                    "\t\t\t\t\t\t" + "<div class = 'chat-bubble' id ='user'>\n" +
-                    "\t\t\t\t\t\t\t" + message + "\n" +
-                    "\t\t\t\t\t\t" + "</div>\n" +
-                    "\t\t\t\t\t" + "</div>");
-
-			    var $submit = $.ajax({
-                    type: 'POST',
-                    url: '/messenger/ajax/process_message/',
-                    data: JSON.stringify({'message': message}),
-                    contentType: 'application/json'
-                });
-
-                var $save_log = $.ajax({
-                    type:'POST',
-                    url:'/____/ajax/generate_log'
-                });
-
-                $save_log.done(function(statement){
-                    alert(statement.message)
-                });
-
-                $submit.done(function(statement){
-                    $('#chat-area').append("<div class = 'chat-bubble-container'>\n" +
-                        "\t\t\t\t\t\t" + "<div class = 'agent-icon'></div>\n" +
-                        "\t\t\t\t\t\t" + "<div class = 'chat-bubble' id='agent'>\n" +
-                        "\t\t\t\t\t\t\t" + statement.response + "\n" +
-                        "\t\t\t\t\t\t" + "</div>\n" +
-                        "\t\t\t\t\t" + "</div>");
-                    $('#chat-area')[0].scrollTop = $('#chat-area')[0].scrollHeight;
-                });
-
-			    $submit.fail(function(){
-
-                });
+            $submit.fail(function () {
+                alert('fail')
+            });
 
 
-			    $('#message').val('');
+            $('#message').val('');
+        }
+
+        $('#message').keydown(function (event) {
+            if (event.keyCode == 13) {
+                event.preventDefault();
+                sendMessage();
             }
+        });
 
-            $('#message').keydown(function(event){
-                if(event.keyCode == 13){
-                    event.preventDefault();
-                    sendMessage();
-                }
-            });
+        $('#send-message').click(function (event) {
+            sendMessage();
+        });
 
-			$('#send-message').click(function(event){
-			    sendMessage();
-            });
+        window.onload = function () {
+            init();
+        }
+    });
+</script>
 
-			window.onload = function () {init();}
-		});
-	</script>
+<body>
+<div class='info-container'>
+    <label class='scroll-arrow'></label>
+    <div class='context-header'>{{ info.title }}</div>
+    <div class='context-info'>
+        {{ info.text }}
+    </div>
 
-	<body>
-		<div class = 'chat-container'>
-			<div class = 'chat-header'>
-				<div class = 'agent-name'>CAILS</div>
-			</div>
+    <div class='context-header'>Characters</div>
+    {% for x in info.display %}
+        <div class='chat-bubble-container'>
+            <div class='agent-icon {{ x.icon }}'></div>
+            <div class='chat-bubble' id='{{ x.id }}'></div>
+        </div>
+    {% endfor %}
+</div>
 
-			<div class = 'chat-box'>
-				<div class = 'chat-area' id='chat-area'>
-                    <div class = 'chat-bubble-container'>
-                        <div class = 'agent-icon'></div>
-                        <div class = 'chat-bubble' id='agent'>
-                            {{ introduction }}
+<div class='chat-container'>
+    <div class='chat-header'>
+        <div class='agent-name'>{{ info.characters }}</div>
+    </div>
+
+    <div class='chat-box'>
+        <div class='chat-area' id='chat-area'>
+            {% for x in introduction %}
+                {% if x.flag %}
+                    <div class='chat-bubble-container'>
+                        <div class='agent-icon {{ x.icon }}'></div>
+                        <div class='chat-bubble-box'>
+                            <div class='name-bubble'>{{ x.name }}</div>
+                            <div class='chat-bubble' id='{{ x.id }}'>
+                                {{ x.message }}
+                            </div>
                         </div>
                     </div>
-                </div>
+                {% else %}
+                    <div class='chat-bubble-container'>
+                        <div class='system-message' id='agent'>
+                            {{ x.message }}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
 
-			</div>
+    </div>
 
-			<div class = 'chat-footer'>
-				<textarea class = 'message-container' id = 'message'>Type a message ...</textarea>
-				<label class = 'send-message'></label>
-			</div>
-		</div>
-	</body>
+    <div class='chat-footer'>
+        <textarea class='message-container' id='message'>Type a message ...</textarea>
+        <label class='send-message'></label>
+    </div>
+</div>
+</body>
 </html>

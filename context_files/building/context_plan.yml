@@ -1,0 +1,29 @@
+description:
+  title: Building a House
+  characters: Winnie the Pooh, Piglet, and Rabbit
+  text: Help Winnie the Pooh, Piglet and Rabbit build a house!
+
+state:
+  topics: [building]
+  location: Hundred Acre Wood
+  characters: [Pooh, Piglet, Rabbit]
+  others:
+    Hundred Acre Woods: [Owl, Kanga, Roo, Eeyore, Tigger]
+
+goals: [[location, location, 1],[material, IsA, 1], [room, IsA, 3+],[furniture, IsA, 3+]]
+
+initial_plan: [[],[], [], []]
+
+display:
+    Pooh:
+      name: Pooh
+      class_id: pooh-chat
+      agent_icon: pooh
+    Piglet:
+      name: Piglet
+      class_id: piglet-chat
+      agent_icon: piglet
+    Rabbit:
+      name: Rabbit
+      class_id: rabbit-chat
+      agent_icon: rabbit

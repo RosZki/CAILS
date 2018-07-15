@@ -23,9 +23,12 @@
         i_think_end: 0.05
         not_sure: 0.05
         recall_correctly: 0.05
+        #comment_on_suggestion
+        agree: 0.90
+        disagree: 0.05
     behavior:
-        ignore: 0
-        patience: 5
+        assertiveness: -0.25
+
 
 - name: Piglet
   type: piglet
@@ -52,9 +55,11 @@
         i_think_end: 0.15
         not_sure: 0.40
         recall_correctly: 0.10
+        #comment_on_suggestion
+        agree: 0.05
+        disagree: 0.80
     behavior:
-        ignore: 0
-        patience: 5
+        assertiveness: -1
 
 - name: Rabbit
   type: rabbit
@@ -81,21 +86,27 @@
         i_think_end: 0.30
         not_sure: 0.01
         recall_correctly: 0.05
+        #comment_on_suggestion
+        agree: 0.05
+        disagree: 0.70
     behavior:
-        ignore: 3
-        patience: 0
+        assertiveness: 0.75
 
 - name: Owl
   type: owl
 
 - name: Tigger
-  type: tigger
+  type: tiger
 
 - name: Eeyore
+  type: donkey
 
 - name: Kanga
+  type: kangaroo
 
 - name: Roo
+  type: kangaroo
 
 - name: Christopher Robin
+  type: human
 
